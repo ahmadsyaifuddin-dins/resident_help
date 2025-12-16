@@ -6,7 +6,15 @@
     <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <form action="{{ route('complaints.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
+            @if ($errors->any())
+                <div class="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Lokasi Kerusakan (Unit Rumah)</label>
                 <select name="ownership_id"

@@ -7,6 +7,7 @@ use App\Models\Ownership;
 use App\Models\Unit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OwnershipController extends Controller
 {
@@ -97,6 +98,27 @@ class OwnershipController extends Controller
 
         return redirect()->route('admin.ownerships.index')
             ->with('success', 'Data Kepemilikan diperbarui.');
+    }
+
+    public function myAssets()
+    {
+        $user = Auth::user();
+
+        // 1. Cari data Customer milik User yang sedang login
+        $customer = Customer::where('user_id', $user->id)->first();
+
+        // 2. Jika user belum didaftarkan biodatanya oleh Admin, return kosong
+        if (! $customer) {
+            return view('nasabah.assets', ['ownerships' => []]);
+        }
+
+        // 3. Ambil data kepemilikan rumah berdasarkan customer_id
+        $ownerships = Ownership::with('unit')
+            ->where('customer_id', $customer->id)
+            ->latest()
+            ->get();
+
+        return view('nasabah.assets', compact('ownerships'));
     }
 
     public function destroy(Ownership $ownership)

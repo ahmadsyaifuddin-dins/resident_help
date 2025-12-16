@@ -41,11 +41,21 @@ Route::middleware('auth')->group(function () {
         Route::get('maintenance', [MaintenanceOrderController::class, 'indexAdmin'])->name('maintenance.index');
         Route::get('maintenance/{id}', [MaintenanceOrderController::class, 'showAdmin'])->name('maintenance.show');
         Route::put('maintenance/{id}/assign', [MaintenanceOrderController::class, 'updateStatus'])->name('maintenance.update');
+
+        // REPORT CENTER
+        Route::get('reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
+
+        // Route Cetak PDF
+        Route::get('reports/print/complaints', [\App\Http\Controllers\ReportController::class, 'complaintsPdf'])->name('reports.complaints.pdf');
+        Route::get('reports/print/technicians', [\App\Http\Controllers\ReportController::class, 'techniciansPdf'])->name('reports.technicians.pdf');
+        Route::get('reports/excel/customers', [\App\Http\Controllers\ReportController::class, 'customersExcel'])->name('reports.customers.excel');
+        Route::get('reports/print/category-stats', [\App\Http\Controllers\ReportController::class, 'categoryStatsPdf'])->name('reports.category.pdf');
+        Route::get('reports/print/sla', [\App\Http\Controllers\ReportController::class, 'slaPdf'])->name('reports.sla.pdf');
+        Route::get('reports/print/ratings', [\App\Http\Controllers\ReportController::class, 'ratingsPdf'])->name('reports.ratings.pdf');
     });
 
     // --- AREA NASABAH & WARGA ---
-    // Uncomment nanti kalau controllernya sudah dibuat
-    // Route::get('/my-assets', [OwnershipController::class, 'myAssets'])->name('my.assets');
+    Route::get('/my-assets', [OwnershipController::class, 'myAssets'])->name('my.assets');
 
     Route::get('/complaints', [MaintenanceOrderController::class, 'indexUser'])->name('complaints.index');
     Route::get('/complaints/create', [MaintenanceOrderController::class, 'create'])->name('complaints.create');

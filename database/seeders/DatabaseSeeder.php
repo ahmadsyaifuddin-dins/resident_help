@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
 
         // Nasabah (Pemilik Asli)
         $userNasabah = User::create([
-            'name' => 'Nasabah',
+            'name' => 'Nasabah (Pemilik Asli)',
             'email' => 'nasabah@gmail.com',
             'role' => 'nasabah',
             'password' => Hash::make('password'),
@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
 
         // 2. BUAT DATA TEKNISI (Sesuai Chat Dospem)
         $techs = [
-            ['name' => 'Mang Udin', 'specialty' => 'Listrik', 'phone' => '0855112233'],
+            ['name' => 'Mang Peter', 'specialty' => 'Listrik', 'phone' => '0855112233'],
             ['name' => 'Pak Slamet', 'specialty' => 'Air/Pipa', 'phone' => '0855445566'],
             ['name' => 'Mas Joko', 'specialty' => 'Bangunan/Semen', 'phone' => '0855778899'],
             ['name' => 'Kang Asep', 'specialty' => 'Atap', 'phone' => '0855009988'],
@@ -92,7 +92,7 @@ class DatabaseSeeder extends Seeder
         // 4. BUAT DATA CUSTOMER DETAIL (Profil Lengkap Nasabah)
         $customer = Customer::create([
             'user_id' => $userNasabah->id,
-            'name' => 'Muhammad Eza',
+            'name' => 'Customer',
             'nik' => '6371012300000001',
             'phone' => '081234567890',
             'address' => 'Jl. Sekumpul Depan No. 12, Martapura',
@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 5. BUAT DATA KEPEMILIKAN (OWNERSHIP)
-        // Hubungkan Eza dengan Unit A-10
+        // Hubungkan Customer dengan Unit A-10
         $handoverDate = Carbon::create(2023, 5, 20); // Serah terima 2023
 
         $ownership = Ownership::create([
@@ -118,20 +118,20 @@ class DatabaseSeeder extends Seeder
         MaintenanceOrder::create([
             'ownership_id' => $ownership->id,
             'reporter_id' => $userWarga->id, // Anaknya yang lapor
-            'technician_id' => 1, // Mang Udin (Listrik)
+            'technician_id' => 1, // Mang Peter (Listrik)
             'complaint_title' => 'Saklar Kamar Depan Konslet',
             'complaint_description' => 'Pas dinyalakan ada bunyi pletek dan lampu tidak nyala.',
             'complaint_date' => Carbon::create(2025, 1, 10),
             'completion_date' => Carbon::create(2025, 1, 11),
             'status' => 'Done',
             'rating' => 5,
-            'review' => 'Mantap, respon cepat. Mang Udin ramah.',
+            'review' => 'Mantap, respon cepat. Mang Peter ramah.',
         ]);
 
         // Kasus 2: Masih Proses (In_Progress)
         MaintenanceOrder::create([
             'ownership_id' => $ownership->id,
-            'reporter_id' => $userNasabah->id, // Eza sendiri yang lapor
+            'reporter_id' => $userNasabah->id, // Customer sendiri yang lapor
             'technician_id' => 2, // Pak Slamet (Air)
             'complaint_title' => 'Pipa Wastafel Bocor',
             'complaint_description' => 'Air merembes ke lantai dapur.',

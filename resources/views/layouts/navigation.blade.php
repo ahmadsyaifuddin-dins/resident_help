@@ -68,35 +68,38 @@
 
             <x-nav-link href="{{ route('admin.customers.index') }}" :active="request()->routeIs('admin.customers.*')">
                 <x-slot name="icon">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
+                    <i class="fas fa-users w-6 h-6 flex items-center justify-center text-lg"></i>
                 </x-slot>
                 {{ __('Data Nasabah') }}
             </x-nav-link>
 
             <x-nav-link href="{{ route('admin.ownerships.index') }}" :active="request()->routeIs('admin.ownerships.*')">
                 <x-slot name="icon">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
+                    <i class="fas fa-handshake w-6 h-6 flex items-center justify-center text-lg"></i>
                 </x-slot>
                 {{ __('Data Penjualan') }}
             </x-nav-link>
 
             <x-nav-link href="{{ route('admin.maintenance.index') }}" :active="request()->routeIs('admin.maintenance.*')">
                 <x-slot name="icon">
+                    <i class="fas fa-tools w-6 h-6 flex items-center justify-center text-lg"></i>
+                </x-slot>
+                {{ __('Keluhan Masuk') }}
+            </x-nav-link>
+
+            <div class="mt-4 mb-2 px-6 text-xs text-gray-400 uppercase tracking-wider">
+                Laporan & Output
+            </div>
+
+            <x-nav-link href="{{ route('admin.reports.index') }}" :active="request()->routeIs('admin.reports.*')">
+                <x-slot name="icon">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                         </path>
                     </svg>
                 </x-slot>
-                {{ __('Laporan Masuk') }}
+                {{ __('Pusat Laporan') }}
             </x-nav-link>
         @endif
 
