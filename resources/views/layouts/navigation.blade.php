@@ -3,6 +3,7 @@
 
 <div :class="sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
     class="fixed z-30 inset-y-0 left-0 w-64 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0">
+
     <div class="flex items-center justify-center mt-8">
         <div class="flex items-center">
             <img src="{{ asset('logo/logo.jpg') }}" alt="Logo" class="w-12 h-12 rounded-full">
@@ -10,66 +11,123 @@
         </div>
     </div>
 
-    <nav class="mt-10" x-data="{ isMultiLevelMenuOpen: false }">
+    <nav class="mt-10">
         <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
             <x-slot name="icon">
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
             </x-slot>
             {{ __('Dashboard') }}
         </x-nav-link>
 
-        <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.index')">
-            <x-slot name="icon">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                    </path>
-                </svg>
-            </x-slot>
-            {{ __('Users') }}
-        </x-nav-link>
+        @if (Auth::user()->role === 'admin')
+            <div class="mt-4 mb-2 px-6 text-xs text-gray-400 uppercase tracking-wider">
+                Master Data
+            </div>
 
-        <x-nav-link href="{{ route('about') }}" :active="request()->routeIs('about')">
-            <x-slot name="icon">
-                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                        d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
-                    </path>
-                </svg>
-            </x-slot>
-            {{ __('About us') }}
-        </x-nav-link>
+            <x-nav-link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')">
+                <x-slot name="icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                </x-slot>
+                {{ __('Data Pengguna') }}
+            </x-nav-link>
 
-        <x-nav-link href="#" @click="isMultiLevelMenuOpen = !isMultiLevelMenuOpen">
-            <x-slot name="icon">
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z">
-                    </path>
-                </svg>
-            </x-slot>
-            Two-level menu
-        </x-nav-link>
-        <template x-if="isMultiLevelMenuOpen">
-            <ul x-transition:enter="transition-all ease-in-out duration-300"
-                x-transition:enter-start="opacity-25 max-h-0" x-transition:enter-end="opacity-100 max-h-xl"
-                x-transition:leave="transition-all ease-in-out duration-300"
-                x-transition:leave-start="opacity-100 max-h-xl" x-transition:leave-end="opacity-0 max-h-0"
-                class="p-2 mx-4 mt-2 space-y-2 overflow-hidden text-sm font-medium text-white bg-gray-700 bg-opacity-50 rounded-md shadow-inner"
-                aria-label="submenu">
-                <li class="px-2 py-1 transition-colors duration-150">
-                    <a class="w-full" href="#">Child menu</a>
-                </li>
-            </ul>
-        </template>
+            <x-nav-link href="{{ route('admin.technicians.index') }}" :active="request()->routeIs('admin.technicians.*')">
+                <x-slot name="icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </x-slot>
+                {{ __('Data Tukang') }}
+            </x-nav-link>
+
+            <x-nav-link href="{{ route('admin.units.index') }}" :active="request()->routeIs('admin.units.*')">
+                <x-slot name="icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                        </path>
+                    </svg>
+                </x-slot>
+                {{ __('Data Unit Rumah') }}
+            </x-nav-link>
+
+            <div class="mt-4 mb-2 px-6 text-xs text-gray-400 uppercase tracking-wider">
+                Transaksi
+            </div>
+
+            <x-nav-link href="{{ route('admin.customers.index') }}" :active="request()->routeIs('admin.customers.*')">
+                <x-slot name="icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                </x-slot>
+                {{ __('Data Nasabah') }}
+            </x-nav-link>
+
+            <x-nav-link href="{{ route('admin.ownerships.index') }}" :active="request()->routeIs('admin.ownerships.*')">
+                <x-slot name="icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                </x-slot>
+                {{ __('Data Penjualan') }}
+            </x-nav-link>
+
+            <x-nav-link href="{{ route('admin.maintenance.index') }}" :active="request()->routeIs('admin.maintenance.*')">
+                <x-slot name="icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                        </path>
+                    </svg>
+                </x-slot>
+                {{ __('Laporan Masuk') }}
+            </x-nav-link>
+        @endif
+
+        @if (in_array(Auth::user()->role, ['nasabah', 'warga']))
+            <div class="mt-4 mb-2 px-6 text-xs text-gray-400 uppercase tracking-wider">
+                Menu Warga
+            </div>
+
+            @if (Auth::user()->role === 'nasabah')
+                <x-nav-link href="{{ route('my.assets') }}" :active="request()->routeIs('my.assets')">
+                    <x-slot name="icon">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
+                    </x-slot>
+                    {{ __('Rumah Saya') }}
+                </x-nav-link>
+            @endif
+
+            <x-nav-link href="{{ route('complaints.index') }}" :active="request()->routeIs('complaints.*')">
+                <x-slot name="icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
+                        </path>
+                    </svg>
+                </x-slot>
+                {{ __('Lapor Keluhan') }}
+            </x-nav-link>
+        @endif
     </nav>
 </div>
