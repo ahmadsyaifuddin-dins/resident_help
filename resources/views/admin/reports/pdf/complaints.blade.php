@@ -9,20 +9,6 @@
             font-size: 12px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h2 {
-            margin: 0;
-        }
-
-        .header p {
-            margin: 2px;
-            color: #555;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -63,16 +49,7 @@
 
 <body>
 
-    <div class="header">
-        <h2>PT. BERKAT SEKUMPUL PUTRA MANDIRI</h2>
-        <p>JL. MARTAPURA LAMA KM. 8 RT. 12 BLOK A KOMPLEK KARYA BUDI UTAMA RAYA I no. 1 KALIMANTAN SELATAN, KAB BANJAR,
-            Sungai Tabuk, Sungai Lulut</p>
-        <hr>
-        <h3>LAPORAN REKAPITULASI KELUHAN WARGA</h3>
-        <p>Periode: Semua Data s/d {{ date('d') }}
-            {{ ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][date('n') - 1] }}
-            {{ date('Y') }}</p>
-    </div>
+    @include('admin.reports.pdf._header')
 
     <table>
         <thead>

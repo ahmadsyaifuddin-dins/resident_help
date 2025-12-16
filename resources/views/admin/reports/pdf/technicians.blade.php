@@ -9,11 +9,6 @@
             font-size: 12px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -44,17 +39,7 @@
 
 <body>
 
-    <div class="header">
-        <h2>PT. BERKAT SEKUMPUL PUTRA MANDIRI PUTRA MANDIRI</h2>
-        <p>JL. MARTAPURA LAMA KM. 8 RT. 12 BLOK A KOMPLEK KARYA BUDI UTAMA RAYA I no. 1 KALIMANTAN SELATAN, KAB BANJAR,
-            Sungai Tabuk, Sungai Lulut</p>
-        <hr>
-        <h3>LAPORAN DATA MITRA TEKNISI</h3>
-        <p>Per Tanggal: {{ date('d') }}
-            {{ ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][date('n') - 1] }}
-            {{ date('Y') }}</p>
-        </p>
-    </div>
+    @include('admin.reports.pdf._header')
 
     <table>
         <thead>

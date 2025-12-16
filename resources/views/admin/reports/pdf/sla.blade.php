@@ -9,11 +9,6 @@
             font-size: 12px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -53,14 +48,8 @@
 </head>
 
 <body>
-    <div class="header">
-        <h2>PT. BERKAT SEKUMPUL PUTRA MANDIRI</h2>
-        <p>JL. MARTAPURA LAMA KM. 8 RT. 12 BLOK A KOMPLEK KARYA BUDI UTAMA RAYA I no. 1 KALIMANTAN SELATAN, KAB BANJAR,
-            Sungai Tabuk, Sungai Lulut</p>
-        <hr>
-        <h3>LAPORAN KINERJA KECEPATAN RESPON (SLA)</h3>
-        <p>Analisis Durasi Penyelesaian Masalah (Service Level Agreement)</p>
-    </div>
+
+    @include('admin.reports.pdf._header')
 
     <table>
         <thead>

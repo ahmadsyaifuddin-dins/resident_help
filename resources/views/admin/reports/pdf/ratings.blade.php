@@ -11,20 +11,6 @@
             font-size: 12px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h2 {
-            margin: 0;
-        }
-
-        .header p {
-            margin: 2px;
-            color: #555;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -71,14 +57,7 @@
 
 <body>
 
-    <div class="header">
-        <h2>PT. BERKAT SEKUMPUL PUTRA MANDIRI</h2>
-        <p>JL. MARTAPURA LAMA KM. 8 RT. 12 BLOK A KOMPLEK KARYA BUDI UTAMA RAYA I no. 1</p>
-        <p>KALIMANTAN SELATAN, KAB BANJAR, Sungai Tabuk, Sungai Lulut</p>
-        <hr style="border: 1px solid #000;">
-        <h3 style="margin-top: 15px;">LAPORAN INDEKS KEPUASAN PELANGGAN</h3>
-        <p>Feedback & Testimoni Warga</p>
-    </div>
+    @include('admin.reports.pdf._header')
 
     <div class="summary-box">
         <b>Rata-rata Rating:</b><br>
