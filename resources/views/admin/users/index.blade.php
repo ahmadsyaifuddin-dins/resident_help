@@ -75,6 +75,10 @@
                         </td>
                         <td class="px-5 py-5 text-sm bg-white border-b border-gray-200 text-center">
                             <div class="flex justify-center space-x-2">
+                                <a href="{{ route('admin.users.show', $user->id) }}"
+                                    class="text-blue-600 hover:text-blue-900" title="Lihat Detail">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                                 <a href="{{ route('admin.users.edit', $user->id) }}"
                                     class="text-indigo-600 hover:text-indigo-900" title="Edit">
                                     <i class="fas fa-edit"></i>

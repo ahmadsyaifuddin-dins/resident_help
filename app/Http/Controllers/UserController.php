@@ -76,6 +76,11 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui!');
     }
 
+    public function show(User $user)
+    {
+        return view('admin.users.show', compact('user'));
+    }
+
     public function destroy(User $user)
     {
         // Cegah admin menghapus dirinya sendiri

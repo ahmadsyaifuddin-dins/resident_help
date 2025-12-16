@@ -19,6 +19,11 @@ class OwnershipController extends Controller
         return view('admin.ownerships.index', compact('ownerships'));
     }
 
+    public function show(Ownership $ownership)
+    {
+        return view('admin.ownerships.show', compact('ownership'));
+    }
+
     public function create()
     {
         // 1. Ambil Unit yang statusnya 'Tersedia' (Biar rumah yg udah laku gak dijual lagi)

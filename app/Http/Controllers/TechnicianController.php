@@ -14,6 +14,13 @@ class TechnicianController extends Controller
         return view('admin.technicians.index', compact('technicians'));
     }
 
+    public function show(Technician $technician)
+    {
+        // Opsional: Load history pekerjaan kalau mau lebih canggih
+        // $technician->load('maintenanceOrders');
+        return view('admin.technicians.show', compact('technician'));
+    }
+
     public function create()
     {
         return view('admin.technicians.create', ['technician' => new Technician]);

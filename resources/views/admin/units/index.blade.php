@@ -60,6 +60,10 @@
                                 </td>
                                 <td class="px-4 py-3 text-sm text-center">
                                     <div class="flex justify-center space-x-4">
+                                        <a href="{{ route('admin.units.show', $unit->id) }}"
+                                            class="text-indigo-600 hover:text-indigo-900" title="Lihat Data">
+                                            <i class="fas fa-eye fa-lg"></i>
+                                        </a>
                                         <a href="{{ route('admin.units.edit', $unit->id) }}"
                                             class="text-indigo-600 hover:text-indigo-900" title="Edit">
                                             <i class="fas fa-edit fa-lg"></i>

@@ -46,6 +46,10 @@
                                 </td>
                                 <td class="px-4 py-3 text-sm text-center">
                                     <div class="flex justify-center space-x-4">
+                                        <a href="{{ route('admin.customers.show', $cust->id) }}"
+                                            class="text-indigo-600 hover:text-indigo-900" title="Lihat Biodata">
+                                            <i class="fas fa-eye fa-lg"></i>
+                                        </a>
                                         <a href="{{ route('admin.customers.edit', $cust->id) }}"
                                             class="text-indigo-600 hover:text-indigo-900" title="Edit Biodata">
                                             <i class="fas fa-edit fa-lg"></i>

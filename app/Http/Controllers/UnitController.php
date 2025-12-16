@@ -15,6 +15,11 @@ class UnitController extends Controller
         return view('admin.units.index', compact('units'));
     }
 
+    public function show(Unit $unit)
+    {
+        return view('admin.units.show', compact('unit'));
+    }
+
     public function create()
     {
         // Kirim object kosong biar form tidak error

@@ -16,6 +16,11 @@ class CustomerController extends Controller
         return view('admin.customers.index', compact('customers'));
     }
 
+    public function show(Customer $customer)
+    {
+        return view('admin.customers.show', compact('customer'));
+    }
+
     public function create()
     {
         // Cari User (Role Nasabah) yang BELUM ada di tabel customers
