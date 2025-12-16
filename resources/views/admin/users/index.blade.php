@@ -33,7 +33,7 @@
         </a>
     </div>
 
-    <div class="inline-block overflow-hidden min-w-full rounded-lg shadow">
+    <div class="overflow-x-auto w-full rounded-lg shadow">
         <table class="min-w-full leading-normal">
             <thead>
                 <tr>

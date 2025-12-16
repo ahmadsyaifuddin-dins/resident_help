@@ -1,13 +1,14 @@
 <div class="space-y-4">
     @if ($errors->any())
         <div class="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <ul>
+            <ul class="list-disc list-inside">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
     @endif
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label class="block text-sm font-medium text-gray-700">Blok</label>
@@ -34,11 +35,17 @@
                 @endforeach
             </select>
         </div>
+
+        {{-- MODIFIKASI INPUT HARGA (AUTO FORMAT) --}}
         <div>
             <label class="block text-sm font-medium text-gray-700">Harga Jual (Rp)</label>
-            <input type="number" name="price" value="{{ old('price', $unit->price) }}"
+
+            <input type="text" id="price_display"
+                value="{{ old('price', $unit->price ? number_format($unit->price, 0, ',', '.') : '') }}"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
-                placeholder="350000000">
+                placeholder="Contoh: 350.000.000">
+
+            <input type="hidden" name="price" id="price_actual" value="{{ old('price', $unit->price) }}">
         </div>
     </div>
 
@@ -110,3 +117,37 @@
         </button>
     </div>
 </div>
+
+{{-- SCRIPT FORMAT RUPIAH --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const displayInput = document.getElementById('price_display');
+        const actualInput = document.getElementById('price_actual');
+
+        // Fungsi Format Angka ke Rupiah (Titik-titik)
+        function formatRupiah(angka) {
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            return split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        }
+
+        // Event Listener saat mengetik
+        displayInput.addEventListener('keyup', function(e) {
+            // Tampilkan format rupiah di layar
+            displayInput.value = formatRupiah(this.value);
+
+            // Simpan angka murni (tanpa titik) ke input hidden buat dikirim ke DB
+            // Contoh: 10.000.000 -> 10000000
+            actualInput.value = this.value.replace(/\./g, '');
+        });
+    });
+</script>

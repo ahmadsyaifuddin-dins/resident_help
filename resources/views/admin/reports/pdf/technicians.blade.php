@@ -50,7 +50,10 @@
             Sungai Tabuk, Sungai Lulut</p>
         <hr>
         <h3>LAPORAN DATA MITRA TEKNISI</h3>
-        <p>Per Tanggal: {{ date('d F Y') }}</p>
+        <p>Per Tanggal: {{ date('d') }}
+            {{ ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][date('n') - 1] }}
+            {{ date('Y') }}</p>
+        </p>
     </div>
 
     <table>

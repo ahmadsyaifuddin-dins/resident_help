@@ -58,6 +58,10 @@
                                 <td class="px-4 py-3">
                                     <a href="{{ route('complaints.show', $order->id) }}"
                                         class="text-indigo-600 hover:underline">Detail</a>
+                                    <a href="{{ route('complaints.print', $order->id) }}" target="_blank"
+                                        class="text-gray-600 hover:text-gray-900" title="Cetak Tiket">
+                                        <i class="fas fa-print"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/complaints', [MaintenanceOrderController::class, 'store'])->name('complaints.store');
     Route::get('/complaints/{id}', [MaintenanceOrderController::class, 'showUser'])->name('complaints.show');
     Route::put('/complaints/{id}/rate', [MaintenanceOrderController::class, 'rateService'])->name('complaints.rate');
+
+    Route::get('/complaints/{id}/print', [MaintenanceOrderController::class, 'printTicket'])->name('complaints.print');
 });
 
 require __DIR__.'/auth.php';

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MaintenanceOrder;
 use App\Models\Ownership;
 use App\Models\Technician;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -142,5 +143,20 @@ class MaintenanceOrderController extends Controller
         ]);
 
         return back()->with('success', 'Terima kasih atas penilaian Anda!');
+    }
+
+    // CETAK TIKET (BONUS)
+    public function printTicket($id)
+    {
+        $order = MaintenanceOrder::with(['ownership.unit', 'technician'])
+            ->where('reporter_id', Auth::id()) // Pastikan punya dia sendiri
+            ->findOrFail($id);
+
+        $pdf = Pdf::loadView('complaints.ticket', compact('order'));
+
+        // Set ukuran kertas struk (opsional, kita pakai A4 setengah aja biar rapi)
+        $pdf->setPaper('A5', 'landscape');
+
+        return $pdf->stream('Tiket-Laporan-#'.$order->id.'.pdf');
     }
 }
