@@ -105,6 +105,7 @@ class OwnershipController extends Controller
             ->with('success', 'Data Kepemilikan diperbarui.');
     }
 
+    // --- FITUR KHUSUS NASABAH ---
     public function myAssets()
     {
         $user = Auth::user();
@@ -112,9 +113,9 @@ class OwnershipController extends Controller
         // 1. Cari data Customer milik User yang sedang login
         $customer = Customer::where('user_id', $user->id)->first();
 
-        // 2. Jika user belum didaftarkan biodatanya oleh Admin, return kosong
+        // 2. Jika user belum didaftarkan biodatanya oleh Admin
         if (! $customer) {
-            return view('nasabah.assets', ['ownerships' => []]);
+            return view('nasabah.assets', ['ownerships' => collect([])]);
         }
 
         // 3. Ambil data kepemilikan rumah berdasarkan customer_id
