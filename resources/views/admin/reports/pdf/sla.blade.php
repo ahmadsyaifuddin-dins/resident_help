@@ -51,6 +51,13 @@
 
     @include('admin.reports.pdf._header')
 
+    <center>
+        <h3 style="margin-top: 0;">LAPORAN KINERJA RESPON (SLA)</h3>
+        <p style="margin-top: -10px; margin-bottom: 20px;">
+            Periode: Semua Data s/d {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}
+        </p>
+    </center>
+
     <table>
         <thead>
             <tr>
@@ -66,9 +73,7 @@
         <tbody>
             @foreach ($orders as $index => $order)
                 @php
-                    // Hitung selisih hari
                     $days = $order->complaint_date->diffInDays($order->completion_date);
-                    // Kalau 0 hari, hitung jam, kalau < 24 jam dianggap 1 hari (Cepat)
                     $duration = $days == 0 ? '< 1 Hari' : $days . ' Hari';
                 @endphp
                 <tr>
@@ -91,7 +96,9 @@
     </table>
 
     <p style="font-size: 10px;">*Standar SLA Perusahaan: Maksimal 2 Hari kerja.</p>
-    <div class="footer">Dicetak pada: {{ now() }}</div>
+    <div class="footer">
+        Dicetak pada: {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y H:i') }}
+    </div>
 </body>
 
 </html>

@@ -41,6 +41,13 @@
 
     @include('admin.reports.pdf._header')
 
+    <center>
+        <h3 style="margin-top: 0;">LAPORAN DATA & KINERJA TEKNISI</h3>
+        <p style="margin-top: -10px; margin-bottom: 20px;">
+            Per Tanggal: {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}
+        </p>
+    </center>
+
     <table>
         <thead>
             <tr>
@@ -73,7 +80,7 @@
     </table>
 
     <div class="footer">
-        Dicetak oleh Admin pada: {{ now() }}
+        Dicetak oleh Admin pada: {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y H:i') }}
     </div>
 
 </body>

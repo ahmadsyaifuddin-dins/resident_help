@@ -51,6 +51,13 @@
 
     @include('admin.reports.pdf._header')
 
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h3 style="margin: 0;">LAPORAN REKAPITULASI KELUHAN WARGA</h3>
+        <p style="margin: 5px 0;">
+            Periode: Semua Data s/d {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}
+        </p>
+    </div>
+
     <table>
         <thead>
             <tr>
@@ -93,7 +100,7 @@
     </table>
 
     <div class="footer">
-        Dicetak oleh Admin pada: {{ now() }}
+        Dicetak oleh Admin pada: {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y H:i') }}
     </div>
 
 </body>

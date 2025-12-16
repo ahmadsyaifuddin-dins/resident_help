@@ -64,6 +64,11 @@
         <span style="font-size: 20px; font-weight: bold;">{{ number_format($averageRating, 1) }} / 5.0</span>
     </div>
 
+    <center>
+        <h3 style="margin-top: 0;">LAPORAN INDEKS KEPUASAN PELANGGAN</h3>
+        <p style="margin-top: -10px; margin-bottom: 20px;">Feedback & Testimoni Warga</p>
+    </center>
+
     <table>
         <thead>
             <tr>
@@ -96,7 +101,7 @@
     </table>
 
     <div class="footer">
-        Dicetak oleh Admin pada: {{ now()->translatedFormat('d F Y H:i') }}
+        Dicetak oleh Admin pada: {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y H:i') }}
     </div>
 
 </body>

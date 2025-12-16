@@ -53,6 +53,13 @@
 <body>
     @include('admin.reports.pdf._header')
 
+    <center>
+        <h3 style="margin-top: 0;">LAPORAN ANALISIS KATEGORI KERUSAKAN</h3>
+        <p style="margin-top: -10px; margin-bottom: 20px;">
+            Periode: Semua Data s/d {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}
+        </p>
+    </center>
+
     <table>
         <thead>
             <tr>
@@ -87,7 +94,9 @@
             dengan persentase tertinggi memerlukan evaluasi kualitas material atau pengerjaan awal.</p>
     </div>
 
-    <div class="footer">Dicetak pada: {{ now() }}</div>
+    <div class="footer">
+        Dicetak oleh Admin pada: {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y H:i') }}
+    </div>
 </body>
 
 </html>
