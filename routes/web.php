@@ -11,7 +11,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -24,17 +24,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // --- AREA ADMIN (Staff) ---
-    // Perhatikan: Kita pakai alias 'admin' yang baru dibuat
+    // alias 'admin'
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
         Route::resource('users', UserController::class);
-        // Pastikan Controller ini sudah dibuat (UnitController)
         Route::resource('units', UnitController::class);
 
         Route::resource('technicians', TechnicianController::class);
 
         Route::resource('customers', CustomerController::class);
-        // Uncomment nanti kalau controllernya sudah dibuat
         Route::resource('ownerships', OwnershipController::class);
 
         // MAINTENANCE (ADMIN)
