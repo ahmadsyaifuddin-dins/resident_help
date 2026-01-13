@@ -17,47 +17,53 @@
                     <thead class="bg-gray-50 border-b">
                         <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase">
                             <th class="px-4 py-3">Tanggal</th>
-                            <th class="px-4 py-3">Keluhan</th>
-                            <th class="px-4 py-3">Teknisi</th>
-                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Unit & Keluhan</th>
+                            <th class="px-4 py-3">Status Laporan</th>
+                            <th class="px-4 py-3">Biaya</th>
                             <th class="px-4 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y">
                         @foreach ($orders as $order)
-                            <tr class="text-gray-700 text-sm">
-                                <td class="px-4 py-3">{{ $order->complaint_date->format('d/m/Y') }}</td>
-                                <td class="px-4 py-3">
-                                    <div class="font-bold">{{ $order->complaint_title }}</div>
-                                    <div class="text-xs text-gray-500 truncate w-48">{{ $order->complaint_description }}
-                                    </div>
+                            <tr class="text-gray-700">
+                                <td class="px-4 py-3 text-sm">
+                                    {{ $order->complaint_date->format('d/m/Y') }}
                                 </td>
-                                <td class="px-4 py-3">
-                                    @if ($order->technician)
-                                        {{ $order->technician->name }} <br>
-                                        <span class="text-xs text-gray-500">({{ $order->technician->specialty }})</span>
-                                    @else
-                                        <span class="text-gray-400 italic">Belum ada</span>
-                                    @endif
+                                <td class="px-4 py-3 text-sm">
+                                    <div class="font-semibold">Blok
+                                        {{ $order->ownership->unit->block }}-{{ $order->ownership->unit->number }}</div>
+                                    <div class="text-xs text-gray-500">{{ $order->complaint_title }}</div>
                                 </td>
-                                <td class="px-4 py-3">
+                                <td class="px-4 py-3 text-xs">
                                     @if ($order->status == 'Pending')
                                         <span
-                                            class="px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded-full">Pending</span>
+                                            class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full">Menunggu</span>
                                     @elseif($order->status == 'In_Progress')
                                         <span
-                                            class="px-2 py-1 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full">Diproses</span>
+                                            class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full">Diproses</span>
                                     @elseif($order->status == 'Done')
                                         <span
-                                            class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Selesai</span>
-                                    @else
-                                        <span
-                                            class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full">Batal</span>
+                                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full">Selesai</span>
                                     @endif
                                 </td>
+
+                                {{-- ISI KOLOM BIAYA --}}
+                                <td class="px-4 py-3 text-xs">
+                                    @if ($order->cost == 0)
+                                        <span class="font-bold text-gray-500">-</span>
+                                    @else
+                                        <div class="font-bold">Rp {{ number_format($order->cost, 0, ',', '.') }}</div>
+                                        @if ($order->payment_status == 'Unpaid')
+                                            <span class="text-red-600 font-bold animate-pulse">BELUM BAYAR</span>
+                                        @else
+                                            <span class="text-green-600 font-bold">LUNAS</span>
+                                        @endif
+                                    @endif
+                                </td>
+
                                 <td class="px-4 py-3">
                                     <a href="{{ route('complaints.show', $order->id) }}"
-                                        class="text-indigo-600 hover:underline">Detail</a>
+                                        class="text-indigo-600 hover:underline mr-2 text-sm">Detail</a>
                                     <a href="{{ route('complaints.print', $order->id) }}" target="_blank"
                                         class="text-gray-600 hover:text-gray-900" title="Cetak Tiket">
                                         <i class="fas fa-print"></i>

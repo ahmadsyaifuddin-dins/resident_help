@@ -21,6 +21,27 @@
                 @endif
             </div>
 
+            {{-- TAMPILKAN TAGIHAN JIKA ADA --}}
+            @if ($order->cost > 0)
+                <div class="mt-4 p-4 bg-white border-l-4 border-orange-500 shadow-sm rounded">
+                    <h4 class="font-bold text-orange-600 text-lg">Tagihan Perbaikan</h4>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-gray-600">Total Biaya:</span>
+                        <span class="text-2xl font-bold text-gray-800">Rp
+                            {{ number_format($order->cost, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="mt-2 text-sm">
+                        Status:
+                        @if ($order->payment_status == 'Paid')
+                            <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full font-bold">LUNAS</span>
+                        @else
+                            <span class="px-2 py-1 bg-red-100 text-red-700 rounded-full font-bold">BELUM DIBAYAR</span>
+                        @endif
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">*Silakan lakukan pembayaran ke Admin Developer.</p>
+                </div>
+            @endif
+
             <p class="text-gray-700 mb-6">{{ $order->complaint_description }}</p>
 
             @if ($order->complaint_photo)

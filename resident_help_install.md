@@ -34,7 +34,7 @@ Pastikan laptop Anda sudah terinstall:
 - **PHP** >= 8.1
 - **Composer** (Dependency Manager PHP)
 - **Node.js** & **NPM** (untuk build frontend)
-- **Database MySQL** (XAMPP/Laragon/MAMP)
+- **Database MySQL** (Laragon)
 - **Git** (opsional, untuk clone repository)
 
 ---
@@ -240,15 +240,3 @@ resident-help/
 │   └── app/public/        # File upload user
 └── .env                   # Konfigurasi environment
 ```
-
----
-
-## 📞 Support
-
-Jika mengalami kendala, silakan hubungi:
-- Email: support@residenthelp.com
-- GitHub Issues: [Link Repository]
-
----
-
-**Selamat menggunakan Resident Help System! 🏘️**

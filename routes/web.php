@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MaintenanceOrderController;
 use App\Http\Controllers\OwnershipController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RepairPriceController;
 use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -39,6 +40,11 @@ Route::middleware('auth')->group(function () {
         Route::get('maintenance', [MaintenanceOrderController::class, 'indexAdmin'])->name('maintenance.index');
         Route::get('maintenance/{id}', [MaintenanceOrderController::class, 'showAdmin'])->name('maintenance.show');
         Route::put('maintenance/{id}/assign', [MaintenanceOrderController::class, 'updateStatus'])->name('maintenance.update');
+
+        Route::resource('prices', RepairPriceController::class);
+
+        Route::put('maintenance/{id}/mark-as-paid', [MaintenanceOrderController::class, 'markAsPaid'])
+            ->name('maintenance.paid');
 
         // REPORT CENTER
         Route::get('reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');

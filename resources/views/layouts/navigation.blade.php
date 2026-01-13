@@ -51,6 +51,13 @@
                 {{ __('Data Tukang') }}
             </x-nav-link>
 
+            <x-nav-link href="{{ route('admin.prices.index') }}" :active="request()->routeIs('admin.prices.*')">
+                <x-slot name="icon">
+                    <i class="fas fa-tags w-6 h-6 flex items-center justify-center text-lg"></i>
+                </x-slot>
+                {{ __('Master Harga') }}
+            </x-nav-link>
+
             <x-nav-link href="{{ route('admin.units.index') }}" :active="request()->routeIs('admin.units.*')">
                 <x-slot name="icon">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

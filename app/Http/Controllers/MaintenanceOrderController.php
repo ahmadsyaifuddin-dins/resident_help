@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\MaintenanceOrder;
 use App\Models\Ownership;
+use App\Models\RepairPrice;
 use App\Models\Technician;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,37 +28,48 @@ class MaintenanceOrderController extends Controller
 
     public function showAdmin($id)
     {
-        $order = MaintenanceOrder::with(['ownership.unit', 'ownership.customer', 'technician', 'reporter'])
-            ->findOrFail($id);
-
+        $order = MaintenanceOrder::with(['ownership.unit', 'ownership.customer', 'technician', 'reporter'])->findOrFail($id);
         $technicians = Technician::where('status', 'Available')->get();
 
-        return view('admin.maintenance.show', compact('order', 'technicians'));
+        // Ambil list harga buat referensi admin
+        $repairPrices = RepairPrice::all();
+
+        // Cek Status Garansi (Logic yang sama kayak di view)
+        $isWarrantyExpired = Carbon::now()->greaterThan($order->ownership->warranty_end_date);
+
+        return view('admin.maintenance.show', compact('order', 'technicians', 'repairPrices', 'isWarrantyExpired'));
     }
 
     public function updateStatus(Request $request, $id)
     {
         $order = MaintenanceOrder::findOrFail($id);
-
         $request->validate([
-            'status' => 'required|in:Pending,In_Progress,Done,Cancelled',
-            'technician_id' => 'nullable|exists:technicians,id',
+            'status' => 'required',
+            'cost' => 'nullable|numeric',
         ]);
 
-        // Update Data
         $order->status = $request->status;
 
-        // Kalau status jadi In_Progress, set teknisi jadi Busy
         if ($request->status == 'In_Progress' && $request->technician_id) {
             $order->technician_id = $request->technician_id;
             Technician::where('id', $request->technician_id)->update(['status' => 'Busy']);
         }
 
-        // Kalau status Done, teknisi jadi Available lagi & catat tanggal selesai
         if ($request->status == 'Done') {
             $order->completion_date = now();
             if ($order->technician_id) {
                 Technician::where('id', $order->technician_id)->update(['status' => 'Available']);
+            }
+
+            // LOGIC BIAYA (Langsung ambil dari request)
+            $cost = $request->input('cost'); // Ambil nilai langsung
+
+            if ($cost > 0) {
+                $order->cost = $cost;
+                $order->payment_status = 'Unpaid';
+            } else {
+                $order->cost = 0;
+                $order->payment_status = 'Free';
             }
         }
 
@@ -65,7 +78,6 @@ class MaintenanceOrderController extends Controller
         return redirect()->route('admin.maintenance.index')
             ->with('success', 'Status perbaikan berhasil diperbarui.');
     }
-
     // --- FITUR WARGA / USER ---
 
     public function indexUser()
@@ -115,10 +127,30 @@ class MaintenanceOrderController extends Controller
             'complaint_photo' => $photoPath,
             'complaint_date' => now(),
             'status' => 'Pending',
+            'cost' => 0,
+            'payment_status' => 'Free',
         ]);
 
         return redirect()->route('complaints.index')
             ->with('success', 'Keluhan berhasil dikirim. Menunggu respon Admin.');
+    }
+
+    // --- FITUR UPDATE PEMBAYARAN ---
+    public function markAsPaid($id)
+    {
+        $order = MaintenanceOrder::findOrFail($id);
+
+        // Cek dulu apakah ada tagihan
+        if ($order->cost <= 0) {
+            return back()->with('error', 'Tidak ada tagihan untuk pesanan ini.');
+        }
+
+        // Update jadi Lunas
+        $order->update([
+            'payment_status' => 'Paid',
+        ]);
+
+        return back()->with('success', 'Tagihan berhasil ditandai LUNAS.');
     }
 
     public function showUser($id)
