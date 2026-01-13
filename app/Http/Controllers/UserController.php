@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ownership;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -16,64 +16,78 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    // Method CREATE (Menampilkan Form Tambah)
     public function create()
     {
-        // Kirim variable user kosong biar form tidak error saat cek value
-        return view('admin.users.create', ['user' => new User]);
+        // 1. Ambil list kepemilikan Active (sama seperti di edit)
+        $ownerships = Ownership::with(['unit', 'customer'])
+            ->where('status', 'Active')
+            ->get();
+
+        // 2. Kirim $ownerships ke view
+        // Kita juga kirim 'user' kosong agar _form.blade.php tidak error saat akses $user->name, dll.
+        return view('admin.users.create', [
+            'user' => new User,
+            'ownerships' => $ownerships,
+        ]);
     }
 
+    // Method STORE (Menyimpan Data Baru)
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,nasabah,warga',
-            'phone' => 'nullable|string|max:20',
+            'role' => 'required',
+            'ownership_id' => 'nullable|exists:ownerships,id',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
             'phone' => $request->phone,
+            'role' => $request->role,
+
+            // Simpan ownership_id (bisa null jika bukan warga)
+            'ownership_id' => $request->ownership_id,
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan!');
+        return redirect()->route('admin.users.index')
+            ->with('success', 'Pengguna baru berhasil ditambahkan.');
     }
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        // Ambil list kepemilikan yang ACTIVE saja untuk dipilih
+        $ownerships = Ownership::with(['unit', 'customer'])
+            ->where('status', 'Active')
+            ->get();
+
+        return view('admin.users.edit', compact('user', 'ownerships'));
     }
 
     public function update(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
-            'role' => 'required|in:admin,nasabah,warga',
-            'phone' => 'nullable|string|max:20',
-            // Password boleh kosong kalau tidak mau diganti
-            'password' => 'nullable|string|min:8|confirmed',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'role' => 'required',
+            // Validasi ownership_id opsional (boleh kosong kalau bukan warga)
+            'ownership_id' => 'nullable|exists:ownerships,id',
         ]);
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-            'phone' => $request->phone,
-        ];
+        $data = $request->only(['name', 'email', 'role', 'ownership_id']);
 
-        // Cek apakah password diisi?
+        // Update password hanya jika diisi
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
         $user->update($data);
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui!');
+        return redirect()->route('admin.users.index')->with('success', 'Data pengguna diperbarui');
     }
 
     public function show(User $user)
@@ -90,6 +104,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus!');
+        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus!');
     }
 }

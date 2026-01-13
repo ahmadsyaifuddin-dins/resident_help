@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\MaintenanceOrder;
 use App\Models\Ownership;
 use App\Models\RepairPrice;
@@ -43,13 +44,21 @@ class MaintenanceOrderController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $order = MaintenanceOrder::findOrFail($id);
+
+        // 1. SANITASI INPUT BIAYA (Ubah ke Integer murni)
+        // Ini memastikan input kosong jadi 0, dan input angka jadi integer
+        $costInput = $request->input('cost');
+        $cleanCost = (int) $costInput;
+
+        // 2. VALIDASI
         $request->validate([
             'status' => 'required',
-            'cost' => 'nullable|numeric',
         ]);
 
+        // 3. UPDATE STATUS & DATA LAIN
         $order->status = $request->status;
 
+        // Logic Teknisi (Busy/Available)
         if ($request->status == 'In_Progress' && $request->technician_id) {
             $order->technician_id = $request->technician_id;
             Technician::where('id', $request->technician_id)->update(['status' => 'Busy']);
@@ -60,15 +69,23 @@ class MaintenanceOrderController extends Controller
             if ($order->technician_id) {
                 Technician::where('id', $order->technician_id)->update(['status' => 'Available']);
             }
+        }
+        // Logic Biaya dipindah KELUAR dari if(Done).
+        // Jadi mau statusnya 'Pending', 'In_Progress', atau 'Done', biaya tetap tersimpan.
 
-            // LOGIC BIAYA (Langsung ambil dari request)
-            $cost = $request->input('cost'); // Ambil nilai langsung
+        if ($cleanCost > 0) {
+            $order->cost = $cleanCost;
 
-            if ($cost > 0) {
-                $order->cost = $cost;
+            // Set Unpaid hanya jika belum lunas
+            if ($order->payment_status != 'Paid') {
                 $order->payment_status = 'Unpaid';
-            } else {
-                $order->cost = 0;
+            }
+        } else {
+            // Jika admin input 0 atau kosong
+            $order->cost = 0;
+
+            // Kembalikan ke Free jika belum lunas
+            if ($order->payment_status != 'Paid') {
                 $order->payment_status = 'Free';
             }
         }
@@ -76,7 +93,7 @@ class MaintenanceOrderController extends Controller
         $order->save();
 
         return redirect()->route('admin.maintenance.index')
-            ->with('success', 'Status perbaikan berhasil diperbarui.');
+            ->with('success', 'Status & Biaya berhasil diperbarui.');
     }
     // --- FITUR WARGA / USER ---
 
@@ -93,14 +110,32 @@ class MaintenanceOrderController extends Controller
 
     public function create()
     {
-        // User harus pilih rumah mana yang rusak
-        // Logic: Cari ownership dimana user ini adalah customer-nya
-        // ATAU kalau dia Warga, cari ownership customer terkait (ini agak kompleks, kita simpelkan dulu: ambil semua unit active)
+        $user = Auth::user();
+        $myHomes = collect([]); // Default kosong
 
-        $myHomes = Ownership::where('status', 'Active')->with('unit')->get();
+        // SKENARIO 1: ROLE NASABAH (Cek via tabel Customers & Ownerships)
+        if ($user->role === 'nasabah') {
+            $customer = Customer::where('user_id', $user->id)->first();
+            if ($customer) {
+                $myHomes = Ownership::where('customer_id', $customer->id)
+                    ->where('status', 'Active')
+                    ->with('unit')
+                    ->get();
+            }
+        }
 
-        // Note: Idealnya difilter berdasarkan Customer ID user login,
-        // tapi untuk demo PKL, ambil semua Active ownership gapapa biar gampang ngetesnya.
+        // SKENARIO 2: ROLE WARGA (Cek via kolom ownership_id di tabel Users)
+        elseif ($user->role === 'warga') {
+            if ($user->ownership_id) {
+                // Ambil data ownership berdasarkan ID yang ditempel di user
+                $myHomes = Ownership::where('id', $user->ownership_id)
+                    ->where('status', 'Active')
+                    ->with('unit')
+                    ->get();
+            }
+        }
+
+        // Jika Admin iseng buka, biarkan kosong atau tampilkan semua (opsional)
 
         return view('complaints.create', compact('myHomes'));
     }

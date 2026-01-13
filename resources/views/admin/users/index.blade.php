@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        {{ __('Manajemen User') }}
+        {{ __('Manajemen Pengguna') }}
     </x-slot>
 
     <div class="mb-4 flex justify-between items-center">
@@ -29,7 +29,7 @@
 
         <a href="{{ route('admin.users.create') }}"
             class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-            <i class="fas fa-plus mr-1"></i> Tambah User
+            <i class="fas fa-plus mr-1"></i> Tambah Pengguna
         </a>
     </div>
 

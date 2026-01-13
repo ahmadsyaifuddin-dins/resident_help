@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        {{ __('Tambah User Baru') }}
+        {{ __('Tambah Pengguna Baru') }}
     </x-slot>
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

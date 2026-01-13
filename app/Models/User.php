@@ -15,8 +15,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',   // Tambahan
-        'phone',  // Tambahan
+        'role',
+        'phone',
+        'ownership_id',
     ];
 
     protected $hidden = [
@@ -36,5 +37,10 @@ class User extends Authenticatable
     public function customer()
     {
         return $this->hasOne(Customer::class);
+    }
+
+    public function ownership()
+    {
+        return $this->belongsTo(Ownership::class);
     }
 }

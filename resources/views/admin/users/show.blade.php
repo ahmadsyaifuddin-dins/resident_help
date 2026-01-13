@@ -31,6 +31,26 @@
                 <label class="text-sm text-gray-500">Terdaftar Sejak</label>
                 <p class="font-medium text-gray-800">{{ $user->created_at->translatedFormat('d F Y') }}</p>
             </div>
+
+            {{-- TAMBAHAN: INFO UNIT JIKA ROLE WARGA --}}
+            @if ($user->role == 'warga')
+                <div class="col-span-1 md:col-span-2 bg-yellow-50 p-4 rounded border border-yellow-200">
+                    <label class="text-sm font-bold text-yellow-800 block mb-1">
+                        <i class="fas fa-home mr-1"></i> Unit Tempat Tinggal
+                    </label>
+                    @if ($user->ownership)
+                        <p class="text-lg font-bold text-gray-800">
+                            Blok {{ $user->ownership->unit->block }} - No {{ $user->ownership->unit->number }}
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            Milik Nasabah: <strong>{{ $user->ownership->customer->name }}</strong>
+                        </p>
+                    @else
+                        <span class="text-red-500 font-semibold text-sm">Belum dihubungkan ke Unit Rumah.</span>
+                    @endif
+                </div>
+            @endif
+
         </div>
 
         <div class="mt-8 flex justify-end space-x-2">

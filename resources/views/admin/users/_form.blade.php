@@ -15,13 +15,30 @@
 
     <div>
         <label class="block text-sm font-medium text-gray-700">Role User</label>
-        <select name="role"
+        {{-- Tambahkan ID 'role-select' --}}
+        <select name="role" id="role-select"
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             <option value="warga" {{ old('role', $user->role) == 'warga' ? 'selected' : '' }}>Warga (Penghuni)</option>
             <option value="nasabah" {{ old('role', $user->role) == 'nasabah' ? 'selected' : '' }}>Nasabah (Pemilik)
             </option>
             <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin (Staff)</option>
         </select>
+    </div>
+
+    {{-- LOGIC: PILIH UNIT RUMAH (KHUSUS WARGA) --}}
+    {{-- Tambahkan ID 'unit-wrapper' agar bisa di-hide via JS --}}
+    <div class="mt-4" id="unit-wrapper" style="display: none;">
+        <label class="block text-sm font-medium text-gray-700">Assign Unit Rumah (Khusus Warga/Penghuni)</label>
+        <select name="ownership_id"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
+            <option value="">-- Tidak Terikat Unit --</option>
+            @foreach ($ownerships as $own)
+                <option value="{{ $own->id }}" {{ $user->ownership_id == $own->id ? 'selected' : '' }}>
+                    Blok {{ $own->unit->block }} No {{ $own->unit->number }} - (Pemilik: {{ $own->customer->name }})
+                </option>
+            @endforeach
+        </select>
+        <p class="text-xs text-gray-500 mt-1">Pilih unit ini jika user adalah anak/keluarga dari pemilik rumah.</p>
     </div>
 
     <div>
@@ -54,3 +71,27 @@
         </button>
     </div>
 </div>
+
+{{-- SCRIPT SEDERHANA UNTUK SHOW/HIDE --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role-select');
+        const unitWrapper = document.getElementById('unit-wrapper');
+
+        function toggleUnitWrapper() {
+            if (roleSelect.value === 'warga') {
+                unitWrapper.style.display = 'block';
+            } else {
+                unitWrapper.style.display = 'none';
+                // Opsional: Reset value select unit jika di-hide
+                // unitWrapper.querySelector('select').value = ""; 
+            }
+        }
+
+        // Jalankan saat pertama kali load (untuk edit mode)
+        toggleUnitWrapper();
+
+        // Jalankan setiap kali user ganti pilihan dropdown
+        roleSelect.addEventListener('change', toggleUnitWrapper);
+    });
+</script>

@@ -9,11 +9,10 @@ class MaintenanceOrder extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
-
     protected $casts = [
         'complaint_date' => 'date',
         'completion_date' => 'date',
+        'cost' => 'integer',
     ];
 
     protected $fillable = [
