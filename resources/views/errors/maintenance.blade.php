@@ -107,7 +107,7 @@
 
         <div class="meta">
             <div><strong>Error Code:</strong> 503_PAYMENT_REQUIRED</div>
-            <div><strong>Reference:</strong> {{ $signature ?? 'UNKNOWN' }}</div>
+            <div><strong>Reference:</strong> UNKNOWN</div>
             <div><strong>Request ID:</strong> {{ $reqId ?? uniqid() }}</div>
         </div>
     </div>
